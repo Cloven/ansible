@@ -1,0 +1,8 @@
+---
+#File roles/fstab/tasks/main.yml
+
+- name: manage /etc/fstab 
+  mount: name={{item.key}} src={{item.value.src}} fstype={{item.value.fstype}} opts={{item.value.opts}} dump={{item.value.dump}} passno={{item.value.passno}} state={{item.value.state}}
+  with_dict: fstab_entries
+  when: hostvars[inventory_hostname].fstab_entries is defined
+  tags: fstab

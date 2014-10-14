@@ -1,0 +1,6 @@
+---
+#File roles/fstab/defaults/main.yml
+
+fstab_entries:
+  defined:
+    isdefined: false

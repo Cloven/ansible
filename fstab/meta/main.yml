@@ -1,0 +1,14 @@
+---
+#File roles/fstab/meta/main.yml
+
+galaxy_info:
+  author: Tony Welder 
+  description: Manages fstab via the hostvars file 
+  license: MIT
+  min_ansible_version: 1.3
+  platforms:
+  - name: RedHat 
+  - name: CentOS
+  categories:
+  - system
+dependencies: [] 
