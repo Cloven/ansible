@@ -12,8 +12,9 @@
 
 ## License
 
-MIT
+- MIT
 
 ## Author Information
 
-Tony Welder
+- Tony Welder
+- tony.wvoip@gmail.com

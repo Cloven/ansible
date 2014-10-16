@@ -1,0 +1,5 @@
+---
+#File roles/limits.d/handlers/main.yml
+
+- name: clean up custom.conf 
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh /etc/security/limits.d custom.conf 

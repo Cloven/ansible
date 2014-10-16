@@ -1,0 +1,14 @@
+---
+#File roles/limits.d/tasks/main.yml
+
+- name: check perms on /etc/security/limits.d directory 
+  file: path=/etc/security/limits.d state=directory owner=root group=root mode=644
+  when: ansible_os_family == "RedHat"
+  tags: limits.d
+
+- name: selinux configuration file /etc/security/limits.d/custom.conf
+  template: src=custom.conf.{{ansible_os_family}}.j2 dest=/etc/security/limits.d/custom.conf owner=root group=root mode=644 backup=yes
+  notify:
+    - clean up custom.conf
+  when: ansible_os_family == "RedHat"
+  tags: limits.d 
