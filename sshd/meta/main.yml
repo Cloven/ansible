@@ -1,0 +1,16 @@
+---
+#File roles/sshd/meta/main.yml
+
+galaxy_info:
+  author: Tony Welder 
+  description: Configure sshd for CentOS/FreeBSD 
+  license: MIT
+  min_ansible_version: 1.3
+  platforms:
+  - name: RedHat 
+  - name: CentOS
+  - name: FreeBSD 
+  categories:
+  - system
+dependencies: 
+  - role: custom

@@ -1,0 +1,7 @@
+Port 22
+ListenAddress {{ansible_default_ipv4['address']}}
+PermitRootLogin no
+PasswordAuthentication yes
+ChallengeResponseAuthentication no
+GSSAPIAuthentication no
+Subsystem       sftp    /usr/libexec/sftp-server

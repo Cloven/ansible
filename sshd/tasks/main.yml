@@ -1,0 +1,18 @@
+#File roles/sshd/tasks/main.yml
+---
+- name: Verify Permissions on SSH directory
+  file: path=/etc/ssh state=directory owner=root mode=755
+  tags: sshd
+
+- name: /etc/ssh/sshd_config
+  template: src=sshd_config.{{ansible_os_family}}.j2 dest=/etc/ssh/sshd_config backup=yes mode=644
+  notify: 
+    - restart sshd 
+    - clean up sshd_config
+  tags: sshd
+
+- name: Ensure that SSHD start on boot in FreeBSD
+  lineinfile: dest="/etc/rc.conf" regexp='^sshd_enable=*' line='sshd_enable="YES"'
+  notify: restart sshd 
+  when: ansible_os_family == "FreeBSD"
+  tags: sshd

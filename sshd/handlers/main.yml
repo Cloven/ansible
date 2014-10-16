@@ -1,0 +1,8 @@
+---
+#File roles/sshd/handlers/main.yml
+
+- name: restart sshd
+  service: name=sshd state=restarted enabled=yes
+
+- name: clean up sshd_config
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh /etc/ssh/ sshd_config 
