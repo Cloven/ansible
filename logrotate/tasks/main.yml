@@ -1,0 +1,34 @@
+---
+#File roles/logrotate/tasks/main.yml
+
+- name: Ensure logrotate is installed
+  yum: name=logrotate state=present 
+  when: ansible_os_family == "RedHat"
+  tags: logrotate 
+
+- name: /etc/logrotate.conf
+  template: src=logrotate.conf.j2 dest=/etc/logrotate.conf mode=664 owner=root group=root backup=yes
+  notify: clean up logrotate.conf
+  when: ansible_os_family == "RedHat"
+  tags: logrotate
+
+- name: /etc/cron.daily/logrotate is absent 
+  file: state=absent path=/etc/cron.daily/logrotate
+  when: ansible_os_family == "RedHat"
+  tags: logrotate
+
+- name: /etc/cron.hourly/logrotate is present 
+  template: src=logrotate.j2 dest=/etc/cron.hourly/logrotate mode=755 owner=root group=root backup=yes
+  notify: clean up logrotate
+  when: ansible_os_family == "RedHat"
+  tags: logrotate
+
+- name: Ensure /var/log/archive exists 
+  file: state=directory path=/var/log/archive owner=root group=root mode=755
+  when: ansible_os_family == "RedHat"
+  tags: logrotate
+
+- name: Ensure /etc/logrotate.d/dracut is absent
+  file: state=absent path=/etc/logrotate.d/dracut
+  when: ansible_os_family == "RedHat"
+  tags: logrotate

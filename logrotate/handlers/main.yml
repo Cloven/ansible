@@ -1,0 +1,8 @@
+---
+#File roles/logrotate/handlers/main.yml
+
+- name: clean up logrotate 
+  command: /usr/local/imx/ansible/ansible_backup_cleanup.sh /etc/cron.hourly/ logrotate 
+
+- name: clean up logrotate.conf
+  command: /usr/local/imx/ansible/ansible_backup_cleanup.sh /etc/ logrotate.conf 
