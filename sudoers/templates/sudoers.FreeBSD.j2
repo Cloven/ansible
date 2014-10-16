@@ -1,0 +1,11 @@
+### Log to auth facility
+Defaults        syslog=auth, !env_reset, env_keep = "HOSTNAME"
+
+### Default root priv
+root    ALL=(ALL) ALL
+
+### Allow wheel and www to execute
+%wheel  ALL=(ALL)       ALL
+
+### Read drop-in files from /etc/sudoers.d (the # here does not mean a comment)
+#includedir /usr/local/etc/sudoers.d

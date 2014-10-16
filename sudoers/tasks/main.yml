@@ -1,0 +1,7 @@
+---
+#File roles/sudoers/tasks/main.yml
+
+- name: standard sudoer's configuration file 
+  template: src=sudoers.{{ansible_os_family}}.j2 dest={{etc_path}}/sudoers mode=440 backup=yes
+  notify: clean up sudoers
+  tags: sudoers 

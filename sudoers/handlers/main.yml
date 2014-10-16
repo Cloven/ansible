@@ -1,0 +1,5 @@
+---
+#File roles/sudoers/handlers/main.yml
+
+- name: clean up sudoers
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh  {{etc_path}} sudoers
