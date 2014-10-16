@@ -1,0 +1,29 @@
+---
+#File roles/custom/tasks/main.yml
+
+- name: /usr/local/ansible Dir
+  file: state=directory path=/usr/local/ansible
+  tags: custom
+
+- name: /var/ansbile/backup Dir
+  file: state=directory path=/var/ansible/backup
+  tags: custom
+
+- name: /usr/local/ansible/scripts Dir
+  file: state=directory path=/usr/local/ansible/scripts
+  tags: custom
+
+
+- name: /usr/local/ansible/scripts/ansible_backup_cleanup.sh
+  template: src=ansible_backup_cleanup.sh.j2 dest=/usr/local/ansible/scripts/ansible_backup_cleanup.sh owner=root group=wheel mode=750
+  tags: custom
+
+- name: /usr/local/bin/ Dir
+  file: state=directory path=/usr/local/bin
+  when: ansible_os_family == "RedHat"
+  tags: custom
+
+- name: symbolic link for bash in RedHat
+  file: state=link src=/bin/bash path=/usr/local/bin/bash
+  when: ansible_os_family == "RedHat"
+  tags: custom

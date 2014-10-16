@@ -1,0 +1,16 @@
+#!{{ user_shell }}
+
+# description:  a simple bash script to clean up after ansible, quick and dirty
+ 
+
+# Author:        Tony Welder
+# email:         tony.welder@wvoip.com
+
+#Read in arguments
+CONFIG_DIRECTORY="$1"
+CONFIG_FILE_NAME="$2"
+
+/bin/mv ${CONFIG_DIRECTORY}/${CONFIG_FILE_NAME}*~ /var/ansible/backup/
+/bin/chmod 440 /var/ansible/backup/*
+/bin/chown root:wheel /var/ansible/backup/*
+exit 0
