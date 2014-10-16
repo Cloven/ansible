@@ -1,0 +1,6 @@
+if ! echo ${PATH} | grep -q /usr/java/default/bin ; then
+	export PATH="/usr/java/default/bin:$PATH"
+
+fi
+export JAVA_HOME="{{java_home}}"
+export JRE_HOME="{{jre_home}}"

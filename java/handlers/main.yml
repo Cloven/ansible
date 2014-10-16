@@ -1,0 +1,5 @@
+---
+#File roles/java/handlers/main.yml
+
+- name: clean up java.sh 
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh /etc/profile.d java.sh 

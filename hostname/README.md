@@ -29,7 +29,7 @@
 ```
 ## License
 
-MIT
+- MIT
 
 ## Author Information
 

@@ -1,0 +1,10 @@
+---
+#File roles/java/defaults/main.yml
+
+default: "latest"
+latest: "jre1.7.0_67"
+java_versions:
+  - "jre1.7.0_67"
+
+java_home: "/usr/java/default"
+jre_home: "/usr/java/default/jre"

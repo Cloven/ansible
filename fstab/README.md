@@ -52,8 +52,9 @@ http://docs.ansible.com/mount_module.html
 ```
 ## License
 
-MIT
+- MIT
 
 ## Author Information
 
-Tony Welder
+- Tony Welder
+- tony.wvoip@gmail.com

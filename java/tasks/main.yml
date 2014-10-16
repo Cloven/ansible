@@ -1,0 +1,29 @@
+#File roles/java/tasks/main.yml
+---
+
+- name: /usr/java Dir
+  file: state=directory path=/usr/java
+  when: ansible_os_family == "RedHat"
+  tags: java
+
+- name: copy over java  
+  unarchive: src=/opt/ansible_store/java/{{ item }}.tar dest=/usr/java/ copy=yes creates=/usr/java/{{ item }} owner=root group=root
+  with_items: java_versions
+  when: ansible_os_family == "RedHat"
+  tags: java
+
+- name: Push java.sh to /etc/profile.d/java.sh 
+  template: src=java.sh.j2 dest=/etc/profile.d/java.sh owner=root group=root backup=yes mode=644
+  notify: clean up java.sh
+  when: ansible_os_family == "RedHat"
+  tags: java 
+
+- name: create symbolic link of latest 
+  file: src=/usr/java/{{latest}} dest=/usr/java/latest state=link 
+  when: ansible_os_family == "RedHat"
+  tags: java
+
+- name: create symoblic link of default
+  file: src=/usr/java/{{default}} dest=/usr/java/default state=link 
+  when: ansible_os_family == "RedHat"
+  tags: java
