@@ -1,0 +1,14 @@
+---
+#File roles/make/meta/main.yml
+
+galaxy_info:
+  author: Tony Welder 
+  description: Manages make.conf on FreeBSD 
+  license: MIT
+  min_ansible_version: 1.3
+  platforms:
+  - name: FreeBSD 
+  categories:
+  - system
+dependencies: 
+  - custom 

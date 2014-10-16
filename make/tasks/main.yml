@@ -1,0 +1,7 @@
+---
+#File roles/make/tasks/main.yml
+
+- name: /usr/local/etc/snmp Directory
+  template: src=make.conf.j2 dest=/etc/make.conf owner=root group=wheel mode=644 backup=yes
+  when: ansible_os_family == "FreeBSD"
+  tags: make

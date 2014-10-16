@@ -1,0 +1,6 @@
+---
+#File roles/make/handlers/main.yml
+
+- name: clean up make.conf
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh /etc make.conf 
+ 
