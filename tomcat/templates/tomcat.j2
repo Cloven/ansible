@@ -1,0 +1,83 @@
+#!/bin/bash
+#
+# tomcat
+#
+# chkconfig: 3 99 10
+# description:  Start up the Tomcat servlet engine.
+
+# Source function library.
+. /etc/init.d/functions
+. /etc/profile.d/java.sh
+
+RETVAL=$?
+CATALINA_HOME="/opt/tomcat"
+
+if [ -e /opt/tomcat/catalina.pid ];then
+  TPID=`cat /opt/tomcat/catalina.pid`
+fi
+
+if [ -z ${SUDO_USER} ]; then
+  CURUSER=`whoami`
+else
+  CURUSER=${SUDO_USER}
+fi
+
+case "$1" in
+ start)
+        if [ -f $CATALINA_HOME/bin/startup.sh ];
+          then
+            echo "`date` - STARTING tomcat as $CURUSER with terminal $TERM" >> /root/tomcat_restart.log
+            echo $"Starting Tomcat"
+            /bin/su - tomcat $CATALINA_HOME/bin/startup.sh
+        fi
+        ;;
+ stop)
+        if [ -f $CATALINA_HOME/bin/shutdown.sh ];
+          then
+            echo "`date` - STOPPING tomcat as $CURUSER with terminal $TERM" >> /root/tomcat_restart.log
+            echo "Stopping Tomcat via script"
+            /bin/su tomcat $CATALINA_HOME/bin/shutdown.sh
+            sleep 10
+            TCNT="kill -s 0 $TPID"
+            $TCNT 2>/dev/null
+            if [ $? -eq 0 ] ; then
+              echo "Stop failed. Killing Tomcat"
+              kill $TPID
+            else
+              echo "PID $TPID isn't running!"
+              exit 1
+            fi
+            sleep 10
+            $TCNT 2>/dev/null
+            if [ $? -eq 0 ];then
+              echo "Kill failed. Force killing Tomcat"
+                i=1
+                while [ $? -ne 1 ] && [ $i -le 3 ] ; do
+                  echo $"Attempt #$i"
+                  ((++i))
+                  kill -9 $TPID
+                  sleep 5
+                  $TCNT 2>/dev/null
+                done
+            fi
+            $TCNT 2>/dev/null
+            if [ $? -eq 0 ];then
+                echo "All attempts to kill Tomcat have failed." | mail -s "Tomcat stop FAILED on `hostname`." imx_sysadmin@intermedix.com
+                exit 1
+            else
+                exit 0
+            fi
+          fi
+        ;;
+restart)
+                echo "`date` - RESTARTING tomcat as $CURUSER with terminal $TERM" >> /root/tomcat_restart.log
+                $0 stop
+                $0 start
+        ;;
+ *)
+        echo $"Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+
+exit $RETVAL

@@ -1,0 +1,21 @@
+---
+#File roles/tomcat/defaults/main.yml
+
+user_shell: "/bin/bash"
+tomcat_version: "7.0.56"
+
+#catalina.sh
+java_opts: ""
+catalina_opts: ""
+catalina_pid: "/opt/tomcat/catalina.pid"
+
+#server.xml
+max_threads: "10"
+management_address: "127.0.01"
+app_address: "127.0.0.1"
+jvmroute: "default"
+
+#ServerInfo.properties
+server_info: ""
+server_number: ""
+server_built: ""

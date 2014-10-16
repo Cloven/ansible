@@ -1,0 +1,119 @@
+#File roles/tomcat/tasks/main.yml
+---
+
+- name: Add tomcat user
+  user: name=tomcat groups=tomcat uid=1001 state=present shell={{ user_shell }}
+  when: ansible_os_family == "RedHat"
+  tags: tomcat
+
+- name: copy over tomcat install 
+  unarchive: src=/opt/ansible_store/tomcat/apache-tomcat-{{ tomcat_version }}.tar.gz dest=/opt/ copy=yes creates=/opt/apache-tomcat-{{ tomcat_version }} owner=root group=root
+  notify: restart tomcat
+  when: ansible_os_family == "RedHat"
+  tags: tomcat
+
+- name: Create symbolic link for tomcat
+  file: src=/opt/apache-tomcat-{{ tomcat_version }} dest=/opt/tomcat state=link
+  when: ansible_os_family == "RedHat"
+  tags: tomcat
+
+- name: Push tomcat init script to /etc/init.d/tomcat 
+  template: src=tomcat.j2 dest=/etc/init.d/tomcat owner=root group=root mode=755 backup=yes
+  notify: 
+    - clean up tomcat init script 
+    - restart tomcat
+  when: ansible_os_family == "RedHat"
+  tags: tomcat 
+
+- name: Ensure several directories exist
+  file: state=directory path={{item}} owner=tomcat group=tomcat mode=755
+  with_items:
+    - /opt/tomcat/lib/org
+    - /opt/tomcat/lib/org/apache
+    - /opt/tomcat/lib/org/apache/catalina
+    - /opt/tomcat/lib/org/apache/catalina/util
+  when: ansible_os_family == "RedHat"
+  tags: tomcat  
+
+- name: Ensure /opt/tomcat is owned by tomcat
+  file: state=directory path=/opt/apache-tomcat-{{ tomcat_version }} owner=tomcat group=tomcat recurse=yes
+  when: ansible_os_family == "RedHat"
+  tags: tomcat
+
+- name: Ensure /opt/tomcat/webapps has the correct permissions
+  file: state=directory path=/opt/tomcat/webapps owner=tomcat group=tomcat mode=2775
+  when: ansible_os_family == "RedHat"
+  tags: tomcat
+
+- name: Because nobody likes Windows
+  file: state=absent path={{item}}
+  with_items: 
+    - /opt/tomcat/webapps/docs
+    - /opt/tomcat/webapps/examples
+    - /opt/tomcat/webapps/ROOT
+    - /opt/tomcat/NOTICE
+    - /opt/tomcat/RELEASE-NOTES
+    - /opt/tomcat/RUNNING.txt
+    - /opt/tomcat/LICENSE 
+  when: ansible_os_family == "RedHat"
+  tags: tomcat
+
+- name: Check for bat files in /opt/tomcat/bin/
+  shell: ls -al /opt/tomcat/bin/ | grep ".bat"
+  register: bat_files
+  changed_when: false
+  when: ansible_os_family == "RedHat"
+  tags: tomcat
+
+- name: If there are bat files present then delete them
+  shell: /bin/rm -rf /opt/tomcat/bin/*.bat
+  when: ansible_os_family == "RedHat" and bat_files.stdout.find(".bat") == 0
+  tags: tomcat
+
+- name: Push ServerInfo.properties to /opt/tomcat/lib/org/apache/catalina/util/
+  template: src=ServerInfo.properties.j2 dest=/opt/tomcat/lib/org/apache/catalina/util/ServerInfo.properties owner=tomcat group=tomcat mode=755 backup=yes
+  notify: 
+    - clean up ServerInfo.properties
+    - restart tomcat 
+  when: ansible_os_family == "RedHat"
+  tags: tomcat
+
+- name: Push catalina.sh to /opt/tomcat/bin/
+  template: src=catalina.sh.j2 dest=/opt/tomcat/bin/catalina.sh owner=tomcat group=tomcat mode=755 backup=yes
+  notify:
+    - clean up catalina.sh 
+    - restart tomcat
+  when: ansible_os_family == "RedHat"
+  tags: tomcat
+
+- name: set up log rotation for tomcat 
+  template: src=logrotate_tomcat.j2 dest=/etc/logrotate.d/tomcat backup=yes
+  notify: clean up tomcat logrotate
+  when: ansible_os_family == "RedHat"
+  tags: tomcat
+
+- name: Push server.xml to /opt/tomcat/conf 
+  template: src=server.xml.j2 dest=/opt/tomcat/conf/server.xml owner=tomcat group=tomcat backup=yes
+  notify:
+    - clean up server.xml
+    - restart tomcat
+  when: ansible_os_family == "RedHat"
+  tags: tomcat
+
+- name: Check if tomcat is a service
+  shell: chkconfig --list | grep tomcat
+  register: chkconfig_tomcat
+  ignore_errors: true
+  changed_when: false
+  when: ansible_os_family == "RedHat"
+  tags: tomcat
+
+- name: Add tomcat as a service
+  command: chkconfig --add tomcat
+  when: ansible_os_family == "RedHat" and chkconfig_tomcat.stdout.find("tomcat") != 0 
+  tags: tomcat
+
+- name: Ensure that tomcat comes up on boot 
+  service: name="tomcat" enabled=yes 
+  when: ansible_os_family == "RedHat"
+  tags: tomcat

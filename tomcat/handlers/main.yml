@@ -1,0 +1,20 @@
+---
+#File roles/tomcat/handlers/main.yml
+
+- name: clean up tomcat init script 
+  command: /usr/local/imx/ansible/ansible_backup_cleanup.sh /etc/init.d tomcat 
+
+- name: clean up ServerInfo.properties
+  command: /usr/local/imx/ansible/ansible_backup_cleanup.sh /opt/tomcat/lib/org/apache/catalina/util ServerInfo.properties 
+
+- name: clean up tomcat logrotate 
+  command: /usr/local/imx/ansible/ansible_backup_cleanup.sh /etc/logrotate.d tomcat
+
+- name: clean up catalina.sh 
+  command: /usr/local/imx/ansible/ansible_backup_cleanup.sh /opt/tomcat/bin catalina.sh 
+
+- name: clean up server.xml
+  command: /usr/local/imx/ansible/ansible_backup_cleanup.sh /opt/tomcat/conf server.xml 
+
+- name: restart tomcat
+  service: name=tomcat state=restarted enabled=yes
