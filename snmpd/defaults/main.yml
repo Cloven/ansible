@@ -1,0 +1,7 @@
+---
+#File roles/snmpd/defaults/main.yml
+
+auth_community: "default"
+syslocation: "somewhere"
+syscontact: "SuperGoodAdmin YouSouldChangeThisEmail@PleaseChangeThisYouDult.com"
+

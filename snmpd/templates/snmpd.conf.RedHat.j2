@@ -1,0 +1,27 @@
+syslocation  "{{sys_location}}"
+syscontact "{{syscontact}}" 
+sysname {{inventory_hostname}} 
+
+agentAddress udp:{{ansible_default_ipv4['address']}}:161
+rocommunity {{auth_community}} 
+trapsink snmp-traps.admin {{auth_community}} 
+agentSecName public
+rouser public
+
+disk / 10%
+disk /boot 10%
+disk /opt 10%
+disk /usr 10%
+disk /var 10%
+disk /var/log 10%
+
+proc udevd 5 1
+proc crond 12 1
+proc sshd 20 1
+proc ntpd 2 1
+proc syslog-ng 2 2
+proc snmpd 5 1
+
+load 4 4 4
+
+defaultMonitors yes

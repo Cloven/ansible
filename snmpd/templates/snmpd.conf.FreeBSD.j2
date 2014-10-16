@@ -1,0 +1,33 @@
+syslocation  "{{syslocation}}"
+syscontact  "{{syscontact}}"
+sysservices 79
+engineID {{inventory_hostname}}
+
+rocommunity {{auth_community}}
+trapsink snmp-traps.admin {{auth_community}} 
+
+agentAddress udp:{{ansible_default_ipv4['address']}}:161
+AgentXSocket udp:localhost:705
+smuxsocket tcp:127.0.0.1:199
+
+disk / 10%
+disk /var 10%
+disk /var/log 10%
+disk /usr 10%
+disk /opt 8%
+disk /tmp 10%
+
+proc devd 1 1
+proc cron 12 1
+proc sshd 20 1
+proc ntpd 3 3
+proc syslog-ng 2 1
+proc sendmail 10 1
+proc snmpd 5 1
+
+load 4 4 4 
+
+agentSecName internal
+rouser internal
+
+defaultMonitors yes

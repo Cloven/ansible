@@ -1,0 +1,8 @@
+---
+#File roles/snmpd/handlers/main.yml
+
+- name: Restart snmpd 
+  service: name=snmpd state=restarted enabled=yes
+
+- name: clean up snmpd.conf 
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh {{etc_path}}/snmp snmpd.conf 

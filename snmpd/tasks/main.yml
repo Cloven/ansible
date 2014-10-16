@@ -1,0 +1,13 @@
+---
+#File roles/snmpd/tasks/main.yml
+
+- name: snmpd Directory
+  file: path={{etc_path}}/snmp state=directory owner=root 
+  tags: snmpd
+
+- name: /usr/local/etc/snmp Directory
+  template: src=snmpd.conf.{{ansible_os_family}}.j2 dest={{etc_path}}/snmp/snmpd.conf mode=644 backup=yes
+  notify: 
+    - Restart snmpd
+    - clean up snmpd.conf
+  tags: snmpd
