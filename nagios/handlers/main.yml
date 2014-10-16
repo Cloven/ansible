@@ -1,0 +1,22 @@
+---
+#File roles/nagios/handlers/main.yml
+
+- name: restart nrpe 
+  service: name={{nrpe_service}} state=restarted enabled=yes
+  tags: nagios
+
+- name: clean up /usr/local/etc/nrpe.cfg 
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh /usr/local/etc nrpe.cfg 
+  when: ansible_os_family == "FreeBSD"
+
+- name: clean up /etc/nagios/nrpe.cfg 
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh /etc/nagios nrpe.cfg 
+  when: ansible_os_family == "RedHat"
+
+- name: clean up /etc/sudoers.d/nagios 
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh /etc/sudoers.d nagios 
+  when: ansible_os_family == "RedHat"
+
+- name: clean up /usr/local/etc/sudoers.d/nagios 
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh /usr/local/etc/sudoers.d nagios
+  when: ansible_os_family == "FreeBSD"

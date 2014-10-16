@@ -1,0 +1,20 @@
+pid_file={{pid_file}}
+server_port={{server_port}}
+nrpe_user={{nrpe_user}}
+nrpe_group={{nrpe_group}}
+dont_blame_nrpe={{dont_blame_nrpe}}
+debug={{debug}}
+command_timeout={{command_timeout}}
+allowed_hosts={{allowed_hosts}}
+server_address={{ansible_default_ipv4['address']}}
+
+# Stock checks
+
+command[check_users]=/usr/lib64/nagios/plugins/check_users -w 5 -c 10
+command[check_load]=/usr/lib64/nagios/plugins/check_load -w 15,10,5 -c 30,25,20
+command[check_hda1]=/usr/lib64/nagios/plugins/check_disk -w 20% -c 10% -p /dev/hda1
+command[check_zombie_procs]=/usr/lib64/nagios/plugins/check_procs -w 5 -c 10 -s Z
+command[check_total_procs]=/usr/lib64/nagios/plugins/check_procs -w 150 -c 200
+command[check_disk]=/usr/lib64/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -W $ARG1$ -K $ARG2$ -p $ARG3$
+command[check_swap]=/usr/lib64/nagios/plugins/check_swap -w $ARG1$ -c $ARG2$
+

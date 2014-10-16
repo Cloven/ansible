@@ -1,0 +1,17 @@
+---
+#File roles/nagios/meta/main.yml
+
+galaxy_info:
+  author: Tony Welder 
+  description: Installs and configures nagios for FreeBSD and Red Hat 
+  license: MIT
+  min_ansible_version: 1.3
+  platforms:
+  - name: RedHat 
+  - name: CentOS 
+  - name: FreeBSD
+  categories:
+  - system
+dependencies: 
+  - role: sudoers
+  - role: custom 

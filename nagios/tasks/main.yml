@@ -1,0 +1,17 @@
+---
+#File roles/nagios/tasks/main.yml
+
+- name: nrpe.cfg
+  template: src=nrpe.cfg.{{ansible_os_family}}.j2 dest={{nrpe_path}} backup=yes mode=644
+  notify: 
+    - restart nrpe
+    - clean up /usr/local/etc/nrpe.cfg
+    - clean up /etc/nagios/nrpe.cfg
+  tags: nagios
+
+- name: Add nagios sudoers
+  template: src=nagios_sudo.{{ansible_os_family}}.j2 dest={{etc_path}}/sudoers.d/nagios mode=440 backup=yes
+  notify: 
+    - clean up /etc/sudoers.d/nagios 
+    - clean up /usr/local/etc/sudoers.d/nagios
+  tags: nagios
