@@ -1,0 +1,21 @@
+---
+#File roles/loader/tasks/main.yml
+
+- name: Check if machine is virtual
+  shell: /bin/kenv | grep smbios.system.product | awk -F '"' '{print $2}'
+  register: smbios_system_product
+  when: ansible_os_family == "FreeBSD"
+  changed_when: False 
+  tags: loader
+
+- name: copy over blank boot/loader.conf if the machine is Virtual
+  template: src=loader.conf.j2 dest=/boot/loader.conf owner=root mode=644 backup=yes
+  notify:
+    - clean up loader.conf
+  when: ansible_os_family == "FreeBSD" and smbios_system_product.stdout in ["KVM","VMware Virtual Platform"] 
+  tags: loader
+
+- name: If machine is physical then add ipmi support
+  lineinfile: dest="/boot/loader.conf" regexp='^ipmi_load=*' line='ipmi_load="YES"' owner=root mode=644 backup=yes state=present create=yes
+  when: ansible_os_family == "FreeBSD" and smbios_system_product.stdout not in ["KVM","VMware Virtual Platform"]
+  tags: loader

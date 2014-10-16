@@ -1,0 +1,5 @@
+---
+#File roles/loader/handlers/main.yml
+
+- name: clean up loader.conf 
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh /boot loader.conf 
