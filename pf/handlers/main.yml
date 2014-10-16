@@ -1,0 +1,5 @@
+---
+#File roles/pf/handlers/main.yml
+
+- name: clean up pf.conf 
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh /etc pf.conf 

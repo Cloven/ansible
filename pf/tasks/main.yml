@@ -1,0 +1,42 @@
+---
+#File roles/pf/tasks/main.yml
+
+- name: Check if pf kernel module is loaded
+  shell: kldstat | {{grep_path}} pf.ko | wc -l
+  register: pf_module
+  changed_when: false
+  when: ansible_os_family == "FreeBSD"
+  tags: pf
+
+- name: Check if the firewall is enabled if module is loaded
+  shell: pfctl -s info | {{grep_path}} "Status:"
+  register: pf_state
+  changed_when: False
+  when: ansible_os_family == "FreeBSD" and pf_module.stdout|int > 0
+  tags: pf
+
+- name: copy over pf.conf
+  template: src=pf.conf.j2 dest=/etc/pf.conf owner=root mode=644 backup=yes
+  notify: clean up pf.conf
+  when: ansible_os_family == "FreeBSD"
+  tags: pf 
+
+- name: Ensure that PF is disabled if pf_enabled = no
+  lineinfile: dest="/etc/rc.conf" regexp='^pf_enable=*' line='pf_enable="NO"'
+  when: ansible_os_family == "FreeBSD" and pf_enabled == "no"
+  tags: pf
+
+- name: Ensure that PF is enabled if pf_enabled = yes
+  lineinfile: dest="/etc/rc.conf" regexp='^pf_enable=*' line='pf_enable="YES"'
+  when: ansible_os_family == "FreeBSD" and pf_enabled == "yes"
+  tags: pf
+
+- name: Ensure that pf is started if pf_enabled = yes
+  service: name=pf state=started 
+  when: ansible_os_family == "FreeBSD" and pf_enabled == "yes" and pf_state.stdout.find("Disabled") != -1
+  tags: pf
+
+- name: Ensure that pf is stopped if pf_enabled = no 
+  service: name=pf state=stopped          
+  when: ansible_os_family == "FreeBSD" and pf_enabled == "no" and pf_module.stdout|int > 0 and pf_state.stdout.find("Enabled") != -1
+  tags: pf
