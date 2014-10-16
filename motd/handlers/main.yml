@@ -1,0 +1,5 @@
+---
+#File roles/motd/handlers/main.yml
+
+- name: clean up motd 
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh /etc motd 
