@@ -1,0 +1,6 @@
+---
+#File roles/hostname/handlers/main.yml
+
+- name: Change current Hostname
+  command: /bin/hostname {{inventory_hostname}}
+  tags: hostname

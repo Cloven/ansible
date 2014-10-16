@@ -1,0 +1,14 @@
+---
+#File roles/hostname/tasks/main.yml
+
+- name: Set Hostname in /etc/sysconfig/network in RedHat only
+  hostname: name={{inventory_hostname}}
+  notify: Change current Hostname
+  when: ansible_os_family == "RedHat"
+  tags: hostname
+
+- name: Specify Hostname in /etc/rc.conf in FreeBSD
+  lineinfile: dest="/etc/rc.conf" regexp='^hostname=*' line='hostname="{{inventory_hostname}}"'
+  notify: Change current Hostname
+  when: ansible_os_family == "FreeBSD"
+  tags: hostname
