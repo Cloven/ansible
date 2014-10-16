@@ -1,0 +1,6 @@
+---
+#File roles/iptables/handlers/main.yml
+
+- name: clean up iptables 
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh /etc/sysconfig iptables 
+ 

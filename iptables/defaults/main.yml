@@ -1,0 +1,4 @@
+---
+#File roles/iptables/defaults/main.yml
+
+iptables_enabled: "no"

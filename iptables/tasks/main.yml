@@ -1,0 +1,23 @@
+---
+#File roles/iptables/tasks/main.yml
+
+- name: Copy over iptables configuration file /etc/sysconfig/iptables
+  template: src=iptables.j2 dest=/etc/sysconfig/iptables mode=644 owner=root backup=yes
+  notify: clean up iptables
+  when: ansible_os_family == "RedHat"
+  tags: iptables
+
+- name: Ensure iptables is stopped if iptables if set to not be enabled on boot 
+  service: name=iptables state=stopped enabled=no
+  when: ansible_os_family == "RedHat" and iptables_enabled == "no" 
+  tags: iptables 
+
+- name: Ensure ip6tables is turned off
+  service: name=ip6tables state=stopped enabled=no
+  when: ansible_os_family == "RedHat"
+  tags: iptables
+
+- name: Ensure iptables is restart if enabled  
+  service: name=iptables state=started enabled=yes
+  when: ansible_os_family == "RedHat" and iptables_enabled == "yes"
+  tags: iptables
