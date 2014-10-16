@@ -1,0 +1,9 @@
+---
+#File roles/aliases/handlers/main.yml
+
+- name: Rebuild aliases.db
+  command: /usr/bin/newaliases
+  tags: aliases
+
+- name: clean up aliases 
+  command: /usr/local/ansible/scripts/ansible_backup_cleanup.sh {{aliases_path}} aliases 

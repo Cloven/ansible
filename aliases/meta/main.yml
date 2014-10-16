@@ -1,0 +1,16 @@
+---
+#File roles/aliases/meta/main.yml
+
+galaxy_info:
+  author: Tony Welder 
+  description: Manage aliases for FreeBSD and RedHat 
+  license: MIT
+  min_ansible_version: 1.3
+  platforms:
+  - name: RedHat 
+  - name: CentOS
+  - name: FreeBSD 
+  categories:
+  - system
+dependencies: 
+  - role: custom

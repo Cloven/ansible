@@ -1,0 +1,13 @@
+---
+#File roles/aliases/tasks/main.yml
+
+- name: copy over aliases 
+  template: src=aliases.j2 dest={{aliases_path}}/aliases mode=644 owner=root backup=yes
+  notify: 
+    - Rebuild aliases.db
+    - clean up aliases
+  tags: aliases
+
+- name: Flush the Handlers
+  meta: flush_handlers
+  tags: aliases 

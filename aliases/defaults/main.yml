@@ -1,0 +1,4 @@
+---
+#File roles/aliases/defaults/main.yml
+
+admin_email: "youneedtochangethistoyouradminemail@PleaseDontLeaveThisAsYourDefaultIdiot.com"
