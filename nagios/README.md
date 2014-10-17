@@ -21,7 +21,6 @@
 ## Manages
 
 - nrpe.cfg: nagios client configuration file
-- Nagios checks(scripts) that are copied to /usr/local/imx
 - Nagios sudoers file
 - NRPE service
 
