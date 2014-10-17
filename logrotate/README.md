@@ -1,6 +1,6 @@
 # logrotate 
 
-- Sets the standard intermedix log rotation in place. 
+- Sets basic log rotation in place. 
 
 ## supported platforms
 
