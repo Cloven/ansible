@@ -1,6 +1,6 @@
 # java 
 
-- a role of capable of installing multiple Java installations at the same time.  Configuration symbolic links for default and latest in /usr/java.  sets JAVA_HOME and JRE_HOME via java.sh in /etc/profile.d.  Also adds java to the paths when a profile is loaded 
+- a role of capable of installing multiple versions of Java at the same time.  Configurates symbolic links for default and latest in /usr/java.  sets JAVA_HOME and JRE_HOME via java.sh in /etc/profile.d and adds java to "PATH" 
 
 ## supported platforms
 

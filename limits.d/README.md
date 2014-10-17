@@ -13,7 +13,7 @@
 ## Manages
 
 - Role only works on RedHat based systems
-- Places intermdix.conf in /etc/secuirty/limits.d
+- Places custom.conf in /etc/secuirty/limits.d
 - Ensure the privileges are correct on /etc/security/limits.d and intermedix.conf
 
 ## Role Dependencies
